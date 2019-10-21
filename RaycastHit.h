@@ -6,7 +6,7 @@
 #include "Ray.h"
 
 struct RaycastHit {
-    float t;
+    float t = 0.0f;
     Vec3 point;
     Vec3 normal;
 };
