@@ -46,7 +46,7 @@ Vec3 Vec3::unit() const {
 }
 
 float Vec3::dot(const Vec3 &v1, const Vec3 &v2) {
-    return v1.x * v2.x + v1.y * v2.y + v1.z + v2.z;
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
 Vec3 Vec3::cross(const Vec3 &v1, const Vec3 &v2) {

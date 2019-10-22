@@ -19,14 +19,14 @@ bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &rayca
 
     float delta = b * b - 4 * a * c;
     if (delta > 0) {
-        float t = (-b - std::sqrt(delta)) / a;
+        float t = (-b - std::sqrt(delta)) / (2 * a);
         if (t < maxDist && t > minDist) {
             raycastHit.t = t;
             raycastHit.point = ray.pointAt(t);
             raycastHit.normal = (raycastHit.point - center) / radius;
             return true;
         }
-        t = (-b + std::sqrt(delta)) / a;
+        t = (-b + std::sqrt(delta)) / (2 * a);
         if (t < maxDist && t > minDist) {
             raycastHit.t = t;
             raycastHit.point = ray.pointAt(t);
