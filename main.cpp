@@ -14,16 +14,17 @@ Vec3 getColor(const Ray &ray, const HittableList &world, const int &maxDepth, st
 int main() {
     std::ofstream file("picture.ppm");
     int width = 400;
-    int height = 20;
+    int height = 200;
 
     int numSample = 100;
     int maxDepth = 20;
 
     HittableList world;
-    world.objectList.push_back(new Sphere(Vec3(0, 0, 1), 0.5f, new Lambertian(Vec3(0.8f, 0.3f, 0.3f))));
+    world.objectList.push_back(new Sphere(Vec3(0, 0, 1), 0.5f, new Lambertian(Vec3(0.1f, 0.2f, 0.5f))));
     world.objectList.push_back(new Sphere(Vec3(0, -100.5f, 1), 100, new Lambertian(Vec3(0.8f, 0.8f, 0.0f))));
     world.objectList.push_back(new Sphere(Vec3(1, 0, 1), 0.5f, new Metal(Vec3(0.8f, 0.6f, 0.2f), 1)));
-    world.objectList.push_back(new Sphere(Vec3(-1, 0, 1), 0.5f, new Metal(Vec3(0.8f, 0.8f, 0.8f), 0.1)));
+    world.objectList.push_back(new Sphere(Vec3(-1, 0, 1), 0.5f, new Dielectric(1.5f)));
+    world.objectList.push_back(new Sphere(Vec3(-1, 0, 1), -0.45f, new Dielectric(1.5f)));
 
     Camera camera = Camera();
     std::default_random_engine randGen;

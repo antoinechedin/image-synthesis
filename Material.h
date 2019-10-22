@@ -26,9 +26,13 @@ public:
             std::default_random_engine &generator
     );
 
+    static Vec3 changeBase(const Vec3 &vec, const Vec3 &normal);
+
     static Vec3 reflectVec(const Vec3 &vec, const Vec3 &normal);
 
-    static Vec3 changeBase(const Vec3 &vec, const Vec3 &normal);
+    static bool refract(const Vec3 &dirIn, const Vec3 &normal, const float &niOverNt, Vec3 &refracted);
+
+    static float schlick(const float &cosine, const float &refractiveIndex);
 };
 
 class Lambertian : public Material {
@@ -52,6 +56,21 @@ class Metal : public Material {
 
 public:
     Metal(const Vec3 &albedo, const float &fuzziness);
+
+    bool scatter(
+            const Ray &rayIn,
+            const RaycastHit &hit,
+            Vec3 &attenuation,
+            Ray &rayOut,
+            std::default_random_engine &generator
+    ) const override;
+};
+
+class Dielectric : public Material {
+public:
+    float refractiveIndex;
+
+    Dielectric(float refractiveIndex);
 
     bool scatter(
             const Ray &rayIn,
