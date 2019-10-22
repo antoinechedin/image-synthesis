@@ -16,17 +16,17 @@ int main() {
     int width = 400;
     int height = 200;
 
-    int numSample = 100;
-    int maxDepth = 20;
+    int numSample = 50;
+    int maxDepth = 50;
 
     HittableList world;
-    world.objectList.push_back(new Sphere(Vec3(0, 0, 1), 0.5f, new Lambertian(Vec3(0.1f, 0.2f, 0.5f))));
-    world.objectList.push_back(new Sphere(Vec3(0, -100.5f, 1), 100, new Lambertian(Vec3(0.8f, 0.8f, 0.0f))));
-    world.objectList.push_back(new Sphere(Vec3(1, 0, 1), 0.5f, new Metal(Vec3(0.8f, 0.6f, 0.2f), 1)));
-    world.objectList.push_back(new Sphere(Vec3(-1, 0, 1), 0.5f, new Dielectric(1.5f)));
-    world.objectList.push_back(new Sphere(Vec3(-1, 0, 1), -0.45f, new Dielectric(1.5f)));
+    world.objectList.push_back(new Sphere(Vec3(0, 0, 0), 1, new Lambertian(Vec3(0.5, 0.5, 0.5))));
+    world.objectList.push_back(new Sphere(Vec3(2, 0, 0), 1, new Lambertian(Vec3(0.9, 0.5, 0.5))));
+//    world.objectList.push_back(new Sphere(Vec3(-2, 0, 0), 1, new Lambertian(Vec3(0.1, 0.5, 0.5))));
+    world.objectList.push_back(new Sphere(Vec3(0, 2, 0), 1, new Lambertian(Vec3(0.5, 0.9, 0.5))));
+//    world.objectList.push_back(new Sphere(Vec3(0, -2, 0), 1, new Lambertian(Vec3(0.5, 0.1, 0.5))));
 
-    Camera camera = Camera();
+    Camera camera = Camera(Vec3(0, 0, -10), Vec3(0, 0, 0), Vec3(0, 1, 0), 30, float(width) / float(height));
     std::default_random_engine randGen;
     std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
@@ -44,9 +44,9 @@ int main() {
             }
             pixel /= float(numSample);
 
-            int ir = int(255.99 * powf(pixel.x, 1.f / 2.2f));
-            int ig = int(255.99 * powf(pixel.y, 1.f / 2.2f));
-            int ib = int(255.99 * powf(pixel.z, 1.f / 2.2f));
+            int ir = int(255.99 * powf(pixel.x, 1.f / 2));
+            int ig = int(255.99 * powf(pixel.y, 1.f / 2));
+            int ib = int(255.99 * powf(pixel.z, 1.f / 2));
             file << ir << " " << ig << " " << ib << "\n";
         }
     }

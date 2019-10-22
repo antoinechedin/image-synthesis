@@ -12,7 +12,7 @@ public:
     Vec3 horizontal;
     Vec3 vertical;
 
-    Camera();
+    Camera(const Vec3 &origin, const Vec3 &lookAt, const Vec3 &up, const float &vfov, const float &aspect);
 
     [[nodiscard]] Ray getRay(const float &u, const float &v) const;
 };

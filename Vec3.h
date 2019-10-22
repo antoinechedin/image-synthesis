@@ -2,6 +2,8 @@
 #define RAY_TRACING_VEC3_H
 
 
+#include <ostream>
+
 class Vec3 {
 public:
     float x;
@@ -41,6 +43,8 @@ public:
     Vec3& operator+=(const Vec3 &rhs);
 
     Vec3& operator/=(const float &t);
+
+    friend std::ostream &operator<<(std::ostream &os, const Vec3 &vec3);
 
 };
 

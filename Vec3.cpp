@@ -85,4 +85,9 @@ Vec3 &Vec3::operator/=(const float &t) {
     return *this;
 }
 
+std::ostream &operator<<(std::ostream &os, const Vec3 &vec3) {
+    os << "[" << vec3.x << ", " << vec3.y << "," << vec3.z << "]";
+    return os;
+}
+
 
