@@ -8,12 +8,15 @@ class Sphere : public Hittable {
 public:
     Vec3 center;
     float radius;
+    Material *material;
 
     Sphere();
 
-    Sphere(const Vec3 &center, float radius);
+    ~Sphere() override;
+
+    Sphere(const Vec3 &center, float radius, Material *material);
     
-    bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit) const override;
+    bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit) const override;
 };
 
 

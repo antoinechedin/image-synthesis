@@ -59,6 +59,10 @@ Vec3 Vec3::operator/(const float &t) const {
     return Vec3(x / t, y / t, z / t);
 }
 
+Vec3 Vec3::operator*(const Vec3 &lhs) const {
+    return Vec3(x * lhs.x, y * lhs.y, z * lhs.z);
+}
+
 Vec3 Vec3::operator*(const float &t) const {
     return Vec3(x * t, y * t, z * t);
 }

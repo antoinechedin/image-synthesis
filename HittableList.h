@@ -5,11 +5,13 @@
 #include <vector>
 #include "RaycastHit.h"
 
+class Hittable;
+
 class HittableList: public Hittable{
 public:
     std::vector<Hittable*> objectList;
 
-    ~HittableList();
+    ~HittableList() override ;
 
     bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit) const override;
 };

@@ -32,6 +32,8 @@ public:
 
     Vec3 operator/(const float &t) const;
 
+    Vec3 operator*(const Vec3 &lhs) const;
+
     Vec3 operator*(const float &t) const;
 
     friend Vec3 operator*(const float &t, const Vec3 &vec3);

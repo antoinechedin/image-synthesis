@@ -6,12 +6,14 @@ Sphere::Sphere() {
     this->radius = 0;
 }
 
-Sphere::Sphere(const Vec3 &center, float radius) {
-    this->center = center;
-    this->radius = radius;
+Sphere::~Sphere() {
+    delete material;
 }
 
-bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit) const {
+Sphere::Sphere(const Vec3 &center, float radius, Material *material)
+        : center(center), radius(radius), material(material) {}
+
+bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit) const {
     Vec3 oc = ray.origin - center;
     float a = 1.0f; // Vec3::dot(ray.direction, ray.direction); Always 1 if direction is normalized
     float b = 2.0f * Vec3::dot(oc, ray.direction);
@@ -21,16 +23,18 @@ bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &rayca
     if (delta > 0) {
         float t = (-b - std::sqrt(delta)) / (2 * a);
         if (t < maxDist && t > minDist) {
-            raycastHit.t = t;
-            raycastHit.point = ray.pointAt(t);
-            raycastHit.normal = (raycastHit.point - center) / radius;
+            hit.t = t;
+            hit.point = ray.pointAt(t);
+            hit.normal = (hit.point - center) / radius;
+            hit.material = material;
             return true;
         }
         t = (-b + std::sqrt(delta)) / (2 * a);
         if (t < maxDist && t > minDist) {
-            raycastHit.t = t;
-            raycastHit.point = ray.pointAt(t);
-            raycastHit.normal = (raycastHit.point - center) / radius;
+            hit.t = t;
+            hit.point = ray.pointAt(t);
+            hit.normal = (hit.point - center) / radius;
+            hit.material = material;
             return true;
         }
     }
