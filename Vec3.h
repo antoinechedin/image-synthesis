@@ -12,16 +12,6 @@ public:
 
     Vec3(float x, float y, float z);
 
-    Vec3 operator+(const Vec3 &lhs) const;
-
-    Vec3 operator-(const Vec3 &lhs) const;
-
-    Vec3 operator/(float t) const;
-
-    Vec3 operator*(float t) const;
-
-    friend Vec3 operator*(float t, const Vec3 &vec3);
-
     [[nodiscard]] float squaredNorm() const;
 
     [[nodiscard]] float norm() const;
@@ -31,6 +21,24 @@ public:
     static float dot(const Vec3 &v1, const Vec3 &v2);
 
     static Vec3 cross(const Vec3 &v1, const Vec3 &v2);
+
+    bool operator==(const Vec3 &rhs) const;
+
+    bool operator!=(const Vec3 &rhs) const;
+
+    Vec3 operator+(const Vec3 &lhs) const;
+
+    Vec3 operator-(const Vec3 &lhs) const;
+
+    Vec3 operator/(const float &t) const;
+
+    Vec3 operator*(const float &t) const;
+
+    friend Vec3 operator*(const float &t, const Vec3 &vec3);
+
+    Vec3& operator+=(const Vec3 &lhs);
+
+    Vec3& operator/=(const float &t);
 
 };
 

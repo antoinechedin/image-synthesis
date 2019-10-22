@@ -13,26 +13,6 @@ Vec3::Vec3(float x, float y, float z) {
     this->z = z;
 }
 
-Vec3 Vec3::operator+(const Vec3 &lhs) const {
-    return Vec3(x + lhs.x, y + lhs.y, z + lhs.z);
-}
-
-Vec3 Vec3::operator-(const Vec3 &lhs) const {
-    return Vec3(x - lhs.x, y - lhs.y, z - lhs.z);
-}
-
-Vec3 Vec3::operator/(float t) const {
-    return Vec3(x / t, y / t, z / t);
-}
-
-Vec3 Vec3::operator*(float t) const {
-    return Vec3(x * t, y * t, z * t);
-}
-
-Vec3 operator*(float t, const Vec3 &vec3) {
-    return vec3 * t;
-}
-
 float Vec3::squaredNorm() const {
     return x * x + y * y + z * z;
 }
@@ -55,6 +35,50 @@ Vec3 Vec3::cross(const Vec3 &v1, const Vec3 &v2) {
             v1.z * v2.x - v1.x * v2.z,
             v1.x * v2.y - v1.y * v2.x
     );
+}
+
+bool Vec3::operator==(const Vec3 &rhs) const {
+    return x == rhs.x &&
+           y == rhs.y &&
+           z == rhs.z;
+}
+
+bool Vec3::operator!=(const Vec3 &rhs) const {
+    return !(rhs == *this);
+}
+
+Vec3 Vec3::operator+(const Vec3 &lhs) const {
+    return Vec3(x + lhs.x, y + lhs.y, z + lhs.z);
+}
+
+Vec3 Vec3::operator-(const Vec3 &lhs) const {
+    return Vec3(x - lhs.x, y - lhs.y, z - lhs.z);
+}
+
+Vec3 Vec3::operator/(const float &t) const {
+    return Vec3(x / t, y / t, z / t);
+}
+
+Vec3 Vec3::operator*(const float &t) const {
+    return Vec3(x * t, y * t, z * t);
+}
+
+Vec3 operator*(const float &t, const Vec3 &vec3) {
+    return vec3 * t;
+}
+
+Vec3 &Vec3::operator+=(const Vec3 &lhs) {
+    this->x += lhs.x;
+    this->y += lhs.y;
+    this->z += lhs.z;
+    return *this;
+}
+
+Vec3 &Vec3::operator/=(const float &t) {
+    this->x /= t;
+    this->y /= t;
+    this->z /= t;
+    return *this;
 }
 
 
