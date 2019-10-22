@@ -47,12 +47,12 @@ bool Vec3::operator!=(const Vec3 &rhs) const {
     return !(rhs == *this);
 }
 
-Vec3 Vec3::operator+(const Vec3 &lhs) const {
-    return Vec3(x + lhs.x, y + lhs.y, z + lhs.z);
+Vec3 Vec3::operator+(const Vec3 &rhs) const {
+    return Vec3(x + rhs.x, y + rhs.y, z + rhs.z);
 }
 
-Vec3 Vec3::operator-(const Vec3 &lhs) const {
-    return Vec3(x - lhs.x, y - lhs.y, z - lhs.z);
+Vec3 Vec3::operator-(const Vec3 &rhs) const {
+    return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
 }
 
 Vec3 Vec3::operator/(const float &t) const {
@@ -67,10 +67,10 @@ Vec3 operator*(const float &t, const Vec3 &vec3) {
     return vec3 * t;
 }
 
-Vec3 &Vec3::operator+=(const Vec3 &lhs) {
-    this->x += lhs.x;
-    this->y += lhs.y;
-    this->z += lhs.z;
+Vec3 &Vec3::operator+=(const Vec3 &rhs) {
+    this->x += rhs.x;
+    this->y += rhs.y;
+    this->z += rhs.z;
     return *this;
 }
 

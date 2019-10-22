@@ -8,7 +8,9 @@
 #include "HittableList.h"
 #include "Camera.h"
 
-Vec3 getColor(const Ray &ray, const HittableList &world);
+Vec3 getColor(const Ray &ray, const HittableList &world, std::default_random_engine &generator);
+
+Vec3 randomDirInHemisphereCosWeight(const Vec3 normal, std::default_random_engine &generator);
 
 int main() {
     std::ofstream file("picture.ppm");
@@ -35,13 +37,13 @@ int main() {
                 float v = (float(j) + dist(randGen)) / float(height);
 
                 Ray ray = camera.getRay(u, v);
-                pixel += getColor(ray, world);
+                pixel += getColor(ray, world, randGen);
             }
             pixel /= float(numSample);
 
-            int ir = int(255.99 * pixel.x);
-            int ig = int(255.99 * pixel.y);
-            int ib = int(255.99 * pixel.z);
+            int ir = int(255.99 * powf(pixel.x, 1.f/2.2f));
+            int ig = int(255.99 * powf(pixel.y, 1.f/2.2f));
+            int ib = int(255.99 * powf(pixel.z, 1.f/2.2f));
             file << ir << " " << ig << " " << ib << "\n";
         }
     }
@@ -49,12 +51,27 @@ int main() {
     return EXIT_SUCCESS;
 }
 
-Vec3 getColor(const Ray &ray, const HittableList &world) {
+Vec3 getColor(const Ray &ray, const HittableList &world, std::default_random_engine &generator) {
     RaycastHit hit;
-    if (world.hit(ray, 0.0f, std::numeric_limits<float>::max(), hit)) {
-        return 0.5f * Vec3(hit.normal.x + 1, hit.normal.y + 1, hit.normal.z + 1);
+    if (world.hit(ray, 0.001f, std::numeric_limits<float>::max(), hit)) {
+        Vec3 newDir = randomDirInHemisphereCosWeight(hit.normal, generator);
+        return 0.5f * getColor(Ray(hit.point, newDir), world, generator) * 0.5f;
     } else {
         float t = 0.5f * (ray.direction.y + 1.0f);
         return (1.0f - t) * Vec3(1.0f, 1.0f, 1.0f) + t * Vec3(0.5f, 0.7f, 1.0f);
     }
+}
+
+Vec3 randomDirInHemisphereCosWeight(const Vec3 normal, std::default_random_engine &generator) {
+    std::uniform_real_distribution dist(0.0f, 1.0f);
+    float r1 = dist(generator);
+    float r2 = dist(generator);
+    float x = cosf(2.0f * M_PI * r1) * sqrtf(1 - r2);
+    float y = sinf(2.0f * M_PI * r1) * sqrtf(1 - r2);
+    float z = sqrtf(r2);
+
+    Vec3 bx(1, 2, 3);
+    Vec3 by = Vec3::cross(normal, bx.unit()).unit();
+    bx = Vec3::cross(by, normal).unit();
+    return Vec3(x * bx + y * by + z * normal);
 }

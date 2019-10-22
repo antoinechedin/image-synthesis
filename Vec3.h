@@ -26,9 +26,9 @@ public:
 
     bool operator!=(const Vec3 &rhs) const;
 
-    Vec3 operator+(const Vec3 &lhs) const;
+    Vec3 operator+(const Vec3 &rhs) const;
 
-    Vec3 operator-(const Vec3 &lhs) const;
+    Vec3 operator-(const Vec3 &rhs) const;
 
     Vec3 operator/(const float &t) const;
 
@@ -36,7 +36,7 @@ public:
 
     friend Vec3 operator*(const float &t, const Vec3 &vec3);
 
-    Vec3& operator+=(const Vec3 &lhs);
+    Vec3& operator+=(const Vec3 &rhs);
 
     Vec3& operator/=(const float &t);
 
