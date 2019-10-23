@@ -16,18 +16,29 @@ int main() {
     int width = 400;
     int height = 200;
 
-    int numSample = 50;
+    int numSample = 1000;
     int maxDepth = 50;
 
     HittableList world;
-    world.objectList.push_back(new Sphere(Vec3(0, 0, 0), 1, new Lambertian(Vec3(0.5, 0.5, 0.5))));
-    world.objectList.push_back(new Sphere(Vec3(2, 0, 0), 1, new Lambertian(Vec3(0.9, 0.5, 0.5))));
-//    world.objectList.push_back(new Sphere(Vec3(-2, 0, 0), 1, new Lambertian(Vec3(0.1, 0.5, 0.5))));
-    world.objectList.push_back(new Sphere(Vec3(0, 2, 0), 1, new Lambertian(Vec3(0.5, 0.9, 0.5))));
-//    world.objectList.push_back(new Sphere(Vec3(0, -2, 0), 1, new Lambertian(Vec3(0.5, 0.1, 0.5))));
+    world.objectList.push_back(new Sphere(Vec3(2, 0, 0), 0.5, new Lambertian(Vec3(0.1, 0.9, 0.5))));
+    world.objectList.push_back(new Sphere(Vec3(1, 0, 0), 0.5, new Dielectric(1.5)));
+//    world.objectList.push_back(new Sphere(Vec3(1, 0, 0), -0.4, new Dielectric(1.5)));
+    world.objectList.push_back(new Sphere(Vec3(0, 0, 0), 0.5, new Lambertian(Vec3(0.5, 0.5, 0.5))));
+    world.objectList.push_back(new Sphere(Vec3(-1, 0, 0), 0.5, new Metal(Vec3(0.9, 0.8, 0.2), 0.3)));
+    world.objectList.push_back(new Sphere(Vec3(-2, 0, 0), 0.5, new Lambertian(Vec3(0.1, 0.2, 0.1))));
+    world.objectList.push_back(new Sphere(Vec3(0, -100.5, 0), 100, new Lambertian(Vec3(1.0, 0.2, 0.1))));
 
-    Camera camera = Camera(Vec3(0, 0, -10), Vec3(0, 0, 0), Vec3(0, 1, 0), 30, float(width) / float(height));
-    std::default_random_engine randGen;
+
+    Camera camera = Camera(
+            Vec3(3, 1, -2),
+            Vec3(0, 0, 0),
+            Vec3(0, 1, 0),
+            30,
+            float(width) / float(height),
+            0.3,
+            Vec3(3, 1, -2).norm()
+    );
+    std::default_random_engine randGenerator;
     std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
     file << "P3\n" << width << " " << height << "\n255\n";
@@ -36,11 +47,11 @@ int main() {
 
             Vec3 pixel = Vec3(0, 0, 0);
             for (int s = 0; s < numSample; ++s) {
-                float u = (float(i) + dist(randGen)) / float(width);
-                float v = (float(j) + dist(randGen)) / float(height);
+                float u = (float(i) + dist(randGenerator)) / float(width);
+                float v = (float(j) + dist(randGenerator)) / float(height);
 
-                Ray ray = camera.getRay(u, v);
-                pixel += getColor(ray, world, 0, randGen);
+                Ray ray = camera.getRay(u, v, randGenerator);
+                pixel += getColor(ray, world, 0, randGenerator);
             }
             pixel /= float(numSample);
 
@@ -67,6 +78,6 @@ Vec3 getColor(const Ray &ray, const HittableList &world, const int &depth, std::
 
     } else {
         float t = 0.5f * (ray.direction.y + 1.0f);
-        return (1.0f - t) * Vec3(1.0f, 1.0f, 1.0f) + t * Vec3(0.5f, 0.7f, 1.0f);
+        return (1.0f - t) * Vec3(1.0, 0.7, 0.7) + t * Vec3(0.5, 0.7, 1.0);
     }
 }
