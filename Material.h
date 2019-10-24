@@ -51,10 +51,10 @@ public:
 };
 
 class Metal : public Material {
+public:
     Vec3 albedo;
     float fuzziness;
 
-public:
     Metal(const Vec3 &albedo, const float &fuzziness);
 
     bool scatter(
@@ -68,9 +68,10 @@ public:
 
 class Dielectric : public Material {
 public:
+    Vec3 albedo;
     float refractiveIndex;
 
-    Dielectric(float refractiveIndex);
+    Dielectric(const Vec3 &albedo, const float &refractiveIndex);
 
     bool scatter(
             const Ray &rayIn,

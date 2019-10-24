@@ -17,26 +17,27 @@ int main() {
     int height = 200;
 
     int numSample = 1000;
-    int maxDepth = 50;
+    //int maxDepth = 50;
 
     HittableList world;
     world.objectList.push_back(new Sphere(Vec3(2, 0, 0), 0.5, new Lambertian(Vec3(0.1, 0.9, 0.5))));
-    world.objectList.push_back(new Sphere(Vec3(1, 0, 0), 0.5, new Dielectric(1.5)));
+    world.objectList.push_back(new Sphere(Vec3(1, 0, 0), 0.5, new Dielectric(Vec3(0.6, 0.8, 1), 1.5)));
 //    world.objectList.push_back(new Sphere(Vec3(1, 0, 0), -0.4, new Dielectric(1.5)));
     world.objectList.push_back(new Sphere(Vec3(0, 0, 0), 0.5, new Lambertian(Vec3(0.5, 0.5, 0.5))));
     world.objectList.push_back(new Sphere(Vec3(-1, 0, 0), 0.5, new Metal(Vec3(0.9, 0.8, 0.2), 0.3)));
-    world.objectList.push_back(new Sphere(Vec3(-2, 0, 0), 0.5, new Lambertian(Vec3(0.1, 0.2, 0.1))));
+    world.objectList.push_back(new Sphere(Vec3(-2, 0, 0), 0.5, new Dielectric(Vec3(0.5, 1, 0.5), 1.5)));
+    world.objectList.push_back(new Sphere(Vec3(-2, 0, 0), -0.4, new Dielectric(Vec3(1, 1, 1), 1.5)));
     world.objectList.push_back(new Sphere(Vec3(0, -100.5, 0), 100, new Lambertian(Vec3(1.0, 0.2, 0.1))));
 
 
     Camera camera = Camera(
-            Vec3(3, 1, -2),
+            Vec3(0.5, 1, -2),
             Vec3(0, 0, 0),
             Vec3(0, 1, 0),
-            30,
+            60,
             float(width) / float(height),
-            0.3,
-            Vec3(3, 1, -2).norm()
+            0.1,
+            Vec3(0.5, 1, -2).norm()
     );
     std::default_random_engine randGenerator;
     std::uniform_real_distribution<float> dist(0.0f, 1.0f);

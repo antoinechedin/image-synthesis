@@ -83,7 +83,8 @@ bool Metal::scatter(
     return (Vec3::dot(rayOut.direction, hit.normal) > 0);
 }
 
-Dielectric::Dielectric(float refractiveIndex) : refractiveIndex(refractiveIndex) {}
+Dielectric::Dielectric(const Vec3 &albedo, const float &refractiveIndex) :
+        refractiveIndex(refractiveIndex), albedo(albedo) {}
 
 bool Dielectric::scatter(
         const Ray &rayIn,
@@ -92,10 +93,10 @@ bool Dielectric::scatter(
         Ray &rayOut,
         std::default_random_engine &generator
 ) const {
+    attenuation = albedo;
     Vec3 outwardNormal;
     Vec3 reflected = Material::reflectVec(rayIn.direction, hit.normal);
     float niOverNt;
-    attenuation = Vec3(1, 1, 1);
     Vec3 refracted;
 
     float reflectProba;
