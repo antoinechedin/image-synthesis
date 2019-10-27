@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "RaycastHit.h"
+#include "AABB.h"
 
 class Hittable;
 
@@ -14,6 +15,8 @@ public:
     ~HittableList() override ;
 
     bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit) const override;
+
+    AABB boundingBox() const override;
 };
 
 

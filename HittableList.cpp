@@ -20,3 +20,12 @@ bool HittableList::hit(const Ray &ray, float minDist, float maxDist, RaycastHit 
     }
     return hasHit;
 }
+
+AABB HittableList::boundingBox() const {
+    if (objectList.empty()) return AABB(Vec3(), Vec3());
+    AABB box;
+    for (Hittable *object : objectList) {
+        box = AABB::surroundingBox(box, object->boundingBox());
+    }
+    return box;
+}

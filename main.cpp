@@ -16,7 +16,7 @@ int main() {
     int width = 400;
     int height = 200;
 
-    int numSample = 1000;
+    int numSample = 100;
     //int maxDepth = 50;
 
     HittableList world;

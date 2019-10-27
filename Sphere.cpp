@@ -40,3 +40,10 @@ bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit) 
     }
     return false;
 }
+
+AABB Sphere::boundingBox() const {
+    return AABB(
+            center - Vec3(radius, radius, radius),
+            center + Vec3(radius, radius, radius)
+    );
+}
