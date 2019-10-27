@@ -53,11 +53,13 @@ BVHNode::BVHNode(std::vector<Hittable *> &list) {
     box = AABB::surroundingBox(left->boundingBox(), right->boundingBox());
 }
 
-bool BVHNode::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit) const {
+bool BVHNode::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit, Metadata &metadata) const {
+    ++metadata.numHitBHV;
+
     if (box.hit(ray, minDist, maxDist)) {
         RaycastHit leftHit, rightHit;
-        bool hasHitLeft = left->hit(ray, minDist, maxDist, leftHit);
-        bool hasHitRight = right->hit(ray, minDist, maxDist, rightHit);
+        bool hasHitLeft = left->hit(ray, minDist, maxDist, leftHit, metadata);
+        bool hasHitRight = right->hit(ray, minDist, maxDist, rightHit, metadata);
         if (hasHitLeft && hasHitRight) {
             if (leftHit.t < rightHit.t)
                 raycastHit = leftHit;

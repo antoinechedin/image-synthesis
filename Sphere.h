@@ -17,7 +17,7 @@ public:
 
     Sphere(const Vec3 &center, float radius, Material *material);
     
-    bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit) const override;
+    bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit, Metadata &metadata) const override;
 
     [[nodiscard]] AABB boundingBox() const override;
 };

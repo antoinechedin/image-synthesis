@@ -13,7 +13,9 @@ Sphere::~Sphere() {
 Sphere::Sphere(const Vec3 &center, float radius, Material *material)
         : center(center), radius(radius), material(material) {}
 
-bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit) const {
+bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit, Metadata &metadata) const {
+    ++metadata.numHitObject;
+
     Vec3 oc = ray.origin - center;
     float a = 1.0f; // Vec3::dot(ray.direction, ray.direction); Always 1 if direction is normalized
     float b = 2.0f * Vec3::dot(oc, ray.direction);

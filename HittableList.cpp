@@ -6,13 +6,13 @@ HittableList::~HittableList() {
     }
 }
 
-bool HittableList::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit) const {
+bool HittableList::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit, Metadata &metadata) const {
     RaycastHit tempHit;
     bool hasHit = false;
     float currentDist = maxDist;
 
     for (Hittable *object : objectList) {
-        if (object->hit(ray, minDist, currentDist, tempHit)) {
+        if (object->hit(ray, minDist, currentDist, tempHit, metadata)) {
             hasHit = true;
             currentDist = tempHit.t;
             raycastHit = tempHit;

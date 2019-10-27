@@ -17,7 +17,7 @@ public :
 
     explicit BVHNode(std::vector<Hittable*> &list);
 
-    bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit) const override;
+    bool hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit, Metadata &metadata) const override;
 
     AABB boundingBox() const override;
 };
