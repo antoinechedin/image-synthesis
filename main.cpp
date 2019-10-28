@@ -29,7 +29,7 @@ std::string timeFormat(const int &milliseconds) {
     int min = sec / 60;
     sec %= 60;
     int hour = min / 60;
-    hour %= 60;
+    min %= 60;
 
     ss << std::setw(2) << std::setfill('0') << hour << ":"
        << std::setw(2) << std::setfill('0') << min << ":"
@@ -41,21 +41,33 @@ std::string timeFormat(const int &milliseconds) {
 std::vector<Hittable *> randomSpheres(const int &numSpheres, std::default_random_engine &g) {
     std::vector<Hittable *> spheres;
     std::uniform_real_distribution p(-100.0f, 100.0f);
-    std::uniform_real_distribution r(1.0f, 3.0f);
+    std::uniform_real_distribution r(0.13, 0.2);
     std::uniform_real_distribution t(0.0f, 1.0f);
 
-    spheres.push_back(new Sphere(Vec3(0, -10000, 0), 10000, new Lambertian(Vec3(0.5f, 0.5f, 0.5f))));
-    for (int i = 0; i < numSpheres; ++i) {
-        float type = t(g);
-        if (type < .8f) {
+    spheres.push_back(new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(Vec3(0.5, 0.5, 0.5))));
+    spheres.push_back(new Sphere(Vec3(0, 0, -1), 2, new Metal(Vec3(0.7, 0.7, 0.7), 0)));
+    spheres.push_back(new Sphere(Vec3(-4, 1, -6.5), 1, new Metal(Vec3(0.9, 0.7, 0.5), 0.3)));
+    spheres.push_back(new Sphere(Vec3(4, 1, -6.5), 1, new Dielectric(Vec3(0.8, 0.8, 1), 1.5)));
+
+
+    for (int i = -20; i < 20; ++i) {
+        for (int j = -20; j < 20; ++j) {
             float radius = r(g);
-            spheres.push_back(new Sphere(Vec3(p(g), radius, p(g)), radius, new Lambertian(Vec3(t(g), t(g), t(g)))));
-        } else if (type < 0.9f) {
-            float radius = r(g);
-            spheres.push_back(new Sphere(Vec3(p(g), radius, p(g)), radius, new Metal(Vec3(0.5f, 0.5f, 0.5f), 0.f)));
-        } else {
-            float radius = r(g);
-            spheres.push_back(new Sphere(Vec3(p(g), radius, p(g)), radius, new Dielectric(Vec3(1, 1, 1), 1.5f)));
+            Vec3 center(i + 0.8 * t(g), radius, j + 0.8 * t(g));
+            if ((center - Vec3(0, 0, -1)).norm() < radius + 2) continue;
+            if ((center - Vec3(-4, 1, -6.5)).norm() < radius + 1) continue;
+            if ((center - Vec3(4, 1, -6.5)).norm() < radius + 1) continue;
+            center = Vec3(center.x, center.y -
+                                    powf(0.02 * sqrtf(std::abs(center.x * center.x) + std::abs(center.z * center.z)),
+                                         2), center.z);
+            float type = t(g);
+            if (type < 0.82) {
+                spheres.push_back(new Sphere(center, radius, new Lambertian(Vec3(t(g), t(g), t(g)))));
+            } else if (type < 0.94) {
+                spheres.push_back(new Sphere(center, radius, new Metal(Vec3(0.8, 0.8, 0.8), 0)));
+            } else {
+                spheres.push_back(new Sphere(center, radius, new Dielectric(Vec3(1, 1, 1), 1.5)));
+            };
         }
     }
     return spheres;
@@ -64,8 +76,8 @@ std::vector<Hittable *> randomSpheres(const int &numSpheres, std::default_random
 
 int main() {
     std::ofstream file("picture.ppm");
-    int width = 400;
-    int height = 200;
+    int width = 1024;
+    int height = 500;
 
     int numSample = 10;
     //int maxDepth = 50;
@@ -84,16 +96,17 @@ int main() {
 //    world.objectList = objects;
 
     Camera camera = Camera(
-            Vec3(0, 20, -60),
+            Vec3(0, 2, -20),
             Vec3(0, 0, 0),
             Vec3(0, 1, 0),
-            40,
+            25,
             float(width) / float(height),
-            0,
-            60
+            0.25,
+            15
     );
     std::default_random_engine randGenerator;
     std::vector<Hittable *> spheres = randomSpheres(1000, randGenerator);
+    std::cout << spheres.size() << std::endl;
     BVHNode bvh(spheres);
     HittableList world;
     world.objectList = spheres;
@@ -162,7 +175,7 @@ Vec3 getColor(
     if (world.hit(ray, 0.1f, std::numeric_limits<float>::max(), hit, metadata)) {
         Ray newRay;
         Vec3 attenuation;
-        if (depth < 20 && hit.material->scatter(ray, hit, attenuation, newRay, generator)) {
+        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, newRay, generator)) {
             if (newRay.direction.norm() > 1.0001) {
                 float norm = newRay.direction.norm();
                 Vec3 dir = newRay.direction;
@@ -175,6 +188,6 @@ Vec3 getColor(
 
     } else {
         float t = 0.5f * (ray.direction.y + 1.0f);
-        return (1.0f - t) * Vec3(1.0, 0.7, 0.7) + t * Vec3(0.5, 0.7, 1.0);
+        return (1.0f - t) * Vec3(1.0, 0.9, 0.9) + t * Vec3(0.5, 0.7, 1.0);
     }
 }
