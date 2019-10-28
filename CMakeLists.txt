@@ -30,12 +30,19 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
     include_directories("${gtest_SOURCE_DIR}/include")
 endif ()
 
-add_executable(ray-tracing main.cpp Vec3.cpp Ray.cpp RaycastHit.h Sphere.cpp Sphere.h HittableList.cpp Camera.cpp Material.cpp AABB.cpp BVHNode.cpp Metadata.h)
+add_library(ray-tracing Vec3.cpp Ray.cpp RaycastHit.h Sphere.cpp Sphere.h HittableList.cpp Camera.cpp Material.cpp AABB.cpp BVHNode.cpp Metadata.h)
 
-add_executable(test-vec3 test/test-vec3.cpp Vec3.cpp)
-target_link_libraries(test-vec3 gtest_main)
+add_executable(render main.cpp)
+target_link_libraries(render ray-tracing)
+
+add_executable(test-vec3 test/test-vec3.cpp)
+target_link_libraries(test-vec3 ray-tracing gtest_main)
 add_test(NAME test-vec3 COMMAND test-vec3)
 
-add_executable(test-sphere test/test-sphere.cpp Vec3.cpp Ray.cpp RaycastHit.h Sphere.cpp Sphere.h HittableList.cpp)
-target_link_libraries(test-sphere gtest_main)
+add_executable(test-sphere test/test-sphere.cpp)
+target_link_libraries(test-sphere ray-tracing gtest_main)
 add_test(NAME test-sphere COMMAND test-sphere)
+
+add_executable(test-bvh test/test-bvh.cpp)
+target_link_libraries(test-bvh ray-tracing gtest_main)
+add_test(NAME test-bvh COMMAND test-bvh)

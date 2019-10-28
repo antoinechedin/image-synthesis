@@ -7,6 +7,13 @@
 #include "BVHNode.h"
 
 BVHNode::BVHNode(std::vector<Hittable *> &list) {
+    if(!list.empty()){
+        this->box = list[0]->boundingBox();
+        for (size_t i = 1; i < list.size(); ++i) {
+            this->box = AABB::surroundingBox(box, list[i]->boundingBox());
+        }
+    }
+
     float xSize = box.max.x - box.min.x;
     float ySize = box.max.y - box.min.y;
     float zSize = box.max.z - box.min.z;
@@ -49,8 +56,6 @@ BVHNode::BVHNode(std::vector<Hittable *> &list) {
         left = new BVHNode(l);
         right = new BVHNode(r);
     }
-
-    box = AABB::surroundingBox(left->boundingBox(), right->boundingBox());
 }
 
 bool BVHNode::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &raycastHit, Metadata &metadata) const {
