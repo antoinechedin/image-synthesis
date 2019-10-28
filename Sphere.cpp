@@ -27,7 +27,7 @@ bool Sphere::hit(const Ray &ray, float minDist, float maxDist, RaycastHit &hit, 
         if (t < maxDist && t > minDist) {
             hit.t = t;
             hit.point = ray.pointAt(t);
-            hit.normal = (hit.point - center) / radius;
+            hit.normal = (hit.point - center).unit();
             hit.material = material;
             return true;
         }

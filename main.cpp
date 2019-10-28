@@ -67,7 +67,7 @@ int main() {
     int width = 400;
     int height = 200;
 
-    int numSample = 100;
+    int numSample = 10;
     //int maxDepth = 50;
 
 //    std::vector<Hittable *> objects;
@@ -89,11 +89,11 @@ int main() {
             Vec3(0, 1, 0),
             40,
             float(width) / float(height),
-            2.0f,
+            0,
             60
     );
     std::default_random_engine randGenerator;
-    std::vector<Hittable *> spheres = randomSpheres(600, randGenerator);
+    std::vector<Hittable *> spheres = randomSpheres(1000, randGenerator);
     BVHNode bvh(spheres);
     HittableList world;
     world.objectList = spheres;
@@ -107,11 +107,16 @@ int main() {
     auto start = std::chrono::high_resolution_clock::now();
     for (int j = height - 1; j >= 0; j--) {
         for (int i = 0; i < width; i++) {
+            if (i == 143 && j == 154) {
+                i = 143;
+            }
 
             Vec3 pixel = Vec3(0, 0, 0);
             for (int s = 0; s < numSample; ++s) {
                 float u = (float(i) + dist(randGenerator)) / float(width);
                 float v = (float(j) + dist(randGenerator)) / float(height);
+//                float u = (float(i)) / float(width);
+//                float v = (float(j)) / float(height);
 
                 Ray ray = camera.getRay(u, v, randGenerator);
                 pixel += getColor(ray, bvh, 0, randGenerator, metadata);
@@ -122,7 +127,8 @@ int main() {
             int ig = int(255. * powf(pixel.y, 1.f / 2));
             int ib = int(255. * powf(pixel.z, 1.f / 2));
             if (ir > 255 || ig > 255 || ib > 255) std::cout << pixel << std::endl;
-            if (ir < 0 || ig < 0 || ib < 0) std::cout << pixel << std::endl;
+            if (ir < 0 || ig < 0 || ib < 0) std::cout << "i:" << i << " j: " << j << std::endl;
+
             file << ir << " " << ig << " " << ib << " ";
         }
         file << std::endl;
@@ -157,6 +163,11 @@ Vec3 getColor(
         Ray newRay;
         Vec3 attenuation;
         if (depth < 20 && hit.material->scatter(ray, hit, attenuation, newRay, generator)) {
+            if (newRay.direction.norm() > 1.0001) {
+                float norm = newRay.direction.norm();
+                Vec3 dir = newRay.direction;
+                float n = 0;
+            }
             return attenuation * getColor(newRay, world, depth + 1, generator, metadata);
         } else {
             return Vec3(0, 0, 0);

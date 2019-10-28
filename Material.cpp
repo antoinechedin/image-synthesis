@@ -79,7 +79,7 @@ bool Metal::scatter(
     if (fuzziness > 0) {
         newDir = Material::randomDirInHemisphereCosWeight(newDir, fuzziness, generator);
     }
-    rayOut = Ray(hit.point, newDir);
+    rayOut = Ray(hit.point, newDir.unit());
     return (Vec3::dot(rayOut.direction, hit.normal) > 0);
 }
 
@@ -119,9 +119,9 @@ bool Dielectric::scatter(
     }
     std::uniform_real_distribution dist(0.0, 1.0);
     if (dist(generator) < reflectProba) {
-        rayOut = Ray(hit.point, reflected);
+        rayOut = Ray(hit.point, reflected.unit());
     } else {
-        rayOut = Ray(hit.point, refracted);
+        rayOut = Ray(hit.point, refracted.unit());
     }
     return true;
 }
