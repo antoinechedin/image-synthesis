@@ -44,27 +44,28 @@ std::vector<Hittable *> randomSpheres(const int &numSpheres, std::default_random
     std::uniform_real_distribution r(0.13, 0.2);
     std::uniform_real_distribution t(0.0f, 1.0f);
 
-    spheres.push_back(new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(Vec3(0.5, 0.5, 0.5))));
-    spheres.push_back(new Sphere(Vec3(0, 0, -1), 2, new Metal(Vec3(0.7, 0.7, 0.7), 0)));
-    spheres.push_back(new Sphere(Vec3(-4, 1, -6.5), 1, new Metal(Vec3(0.9, 0.7, 0.5), 0.3)));
-    spheres.push_back(new Sphere(Vec3(4, 1, -6.5), 1, new Dielectric(Vec3(0.8, 0.8, 1), 1.5)));
+    spheres.push_back(new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(Vec3(1, 0.2, 0.1))));
+    spheres.push_back(new Sphere(Vec3(0, 0, -1), 2.6, new Metal(Vec3(0.8, 0.8, 0.8), 0)));
+    spheres.push_back(new Sphere(Vec3(0, 5.6, -1), 3, new Metal(Vec3(0.8, 0.8, 0.8), 0)));
+    spheres.push_back(new Sphere(Vec3(-4, 1.19, -6.5), 1.2, new Metal(Vec3(0.9, 0.7, 0.5), 0.1)));
+    spheres.push_back(new Sphere(Vec3(4, 1.19, -6.5), 1.2, new Dielectric(Vec3(0.8, 0.8, 1), 1.5)));
 
 
-    for (int i = -20; i < 20; ++i) {
-        for (int j = -20; j < 20; ++j) {
+    for (int i = -50; i < 50; ++i) {
+        for (int j = -20; j < 40; ++j) {
             float radius = r(g);
             Vec3 center(i + 0.8 * t(g), radius, j + 0.8 * t(g));
-            if ((center - Vec3(0, 0, -1)).norm() < radius + 2) continue;
-            if ((center - Vec3(-4, 1, -6.5)).norm() < radius + 1) continue;
-            if ((center - Vec3(4, 1, -6.5)).norm() < radius + 1) continue;
+            if ((center - Vec3(0, 0, -1)).norm() < radius + 2.6) continue;
+            if ((center - Vec3(-4, 1.19, -6.5)).norm() < radius + 1.2) continue;
+            if ((center - Vec3(4, 1.19, -6.5)).norm() < radius + 1.2) continue;
             center = Vec3(center.x, center.y -
                                     powf(0.02 * sqrtf(std::abs(center.x * center.x) + std::abs(center.z * center.z)),
                                          2), center.z);
             float type = t(g);
-            if (type < 0.82) {
-                spheres.push_back(new Sphere(center, radius, new Lambertian(Vec3(t(g), t(g), t(g)))));
-            } else if (type < 0.94) {
-                spheres.push_back(new Sphere(center, radius, new Metal(Vec3(0.8, 0.8, 0.8), 0)));
+            if (type < 0.90) {
+                spheres.push_back(new Sphere(center, radius, new Lambertian(Vec3(t(g)/1.3, t(g), t(g)))));
+            } else if (type < 0.95) {
+                spheres.push_back(new Sphere(center, radius, new Metal(Vec3(0.8, 0.8, 0.8), 0.3)));
             } else {
                 spheres.push_back(new Sphere(center, radius, new Dielectric(Vec3(1, 1, 1), 1.5)));
             };
@@ -79,7 +80,7 @@ int main() {
     int width = 1024;
     int height = 500;
 
-    int numSample = 10;
+    int numSample = 3000;
     //int maxDepth = 50;
 
 //    std::vector<Hittable *> objects;
@@ -96,12 +97,12 @@ int main() {
 //    world.objectList = objects;
 
     Camera camera = Camera(
-            Vec3(0, 2, -20),
-            Vec3(0, 0, 0),
+            Vec3(0, 3, -20),
+            Vec3(0, 1, 0),
             Vec3(0, 1, 0),
             25,
             float(width) / float(height),
-            0.25,
+            0.32,
             15
     );
     std::default_random_engine randGenerator;
@@ -172,10 +173,10 @@ Vec3 getColor(
         Metadata &metadata
 ) {
     RaycastHit hit;
-    if (world.hit(ray, 0.1f, std::numeric_limits<float>::max(), hit, metadata)) {
+    if (world.hit(ray, 0.001f, std::numeric_limits<float>::max(), hit, metadata)) {
         Ray newRay;
         Vec3 attenuation;
-        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, newRay, generator)) {
+        if (depth < 100 && hit.material->scatter(ray, hit, attenuation, newRay, generator)) {
             if (newRay.direction.norm() > 1.0001) {
                 float norm = newRay.direction.norm();
                 Vec3 dir = newRay.direction;
