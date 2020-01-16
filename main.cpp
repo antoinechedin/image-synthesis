@@ -80,7 +80,7 @@ int main() {
     int width = 1024;
     int height = 500;
 
-    int numSample = 3000;
+    int numSample = 5;
     //int maxDepth = 50;
 
 //    std::vector<Hittable *> objects;
