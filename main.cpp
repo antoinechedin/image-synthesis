@@ -47,8 +47,8 @@ std::vector<Hittable *> randomSpheres(const int &numSpheres, std::default_random
     spheres.push_back(new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(Vec3(1, 0.2, 0.1))));
     spheres.push_back(new Sphere(Vec3(0, 0, -1), 2.6, new Metal(Vec3(0.8, 0.8, 0.8), 0)));
     spheres.push_back(new Sphere(Vec3(0, 5.6, -1), 3, new Metal(Vec3(0.8, 0.8, 0.8), 0)));
-    spheres.push_back(new Sphere(Vec3(-4, 1.19, -6.5), 1.2, new Metal(Vec3(0.9, 0.7, 0.5), 0.1)));
-    spheres.push_back(new Sphere(Vec3(4, 1.19, -6.5), 1.2, new Dielectric(Vec3(0.8, 0.8, 1), 1.5)));
+    spheres.push_back(new Sphere(Vec3(-3.5, 1.19, -6.5), 1.2, new Metal(Vec3(0.9, 0.7, 0.5), 0.1)));
+    spheres.push_back(new Sphere(Vec3(3.5, 1.19, -6.5), 1.2, new Dielectric(Vec3(0.8, 0.8, 1), 1.5)));
 
 
     for (int i = -50; i < 50; ++i) {
@@ -63,7 +63,7 @@ std::vector<Hittable *> randomSpheres(const int &numSpheres, std::default_random
                                          2), center.z);
             float type = t(g);
             if (type < 0.90) {
-                spheres.push_back(new Sphere(center, radius, new Lambertian(Vec3(t(g)/1.3, t(g), t(g)))));
+                spheres.push_back(new Sphere(center, radius, new Lambertian(Vec3(t(g) / 1.3, t(g), t(g)))));
             } else if (type < 0.95) {
                 spheres.push_back(new Sphere(center, radius, new Metal(Vec3(0.8, 0.8, 0.8), 0.3)));
             } else {
@@ -74,37 +74,79 @@ std::vector<Hittable *> randomSpheres(const int &numSpheres, std::default_random
     return spheres;
 }
 
+std::vector<Hittable *> scene1() {
+    std::vector<Hittable *> spheres;
+
+    spheres.push_back(new Sphere(Vec3(2, 0, 0), 0.5, new Lambertian(Vec3(0.1, 0.9, 0.5))));
+    spheres.push_back(new Sphere(Vec3(1, 0, 0), 0.5, new Dielectric(Vec3(0.6, 0.8, 1), 1.5)));
+    spheres.push_back(new Sphere(Vec3(0, 0, 0), 0.5, new Lambertian(Vec3(0.9, 0.9, 0.9))));
+    spheres.push_back(new Sphere(Vec3(-1, 0, 0), 0.5, new Metal(Vec3(0.9, 0.8, 0.2), 0.3)));
+    spheres.push_back(new Sphere(Vec3(-2, 0, 0), 0.5, new Dielectric(Vec3(0.5, 1, 0.5), 1.5)));
+    spheres.push_back(new Sphere(Vec3(-3, 0, 0), 0.5, new Lambertian(Vec3(0.1, 0.2, 1))));
+
+    spheres.push_back(new Sphere(Vec3(-1.3, -0.6, -1.3), 0.7, new Metal(Vec3(0.8, 0.8, 0.8), 0.1)));
+    spheres.push_back(new Sphere(Vec3(5, 10, -3), 4, new Lambertian(Vec3(1, 1, 1))));
+
+    spheres.push_back(new Sphere(Vec3(0, -100.5, 0), 100, new Lambertian(Vec3(1.0, 0.2, 0.1))));
+
+    return spheres;
+}
+
+std::vector<Hittable *> cornellBox() {
+    std::vector<Hittable *> objects;
+
+    objects.push_back(new Sphere(Vec3(0, 1005, 0), 1000, new Lambertian(Vec3(0.95, 0.95, 0.95))));
+    objects.push_back(new Sphere(Vec3(0, 0, 1005), 1000, new Lambertian(Vec3(0.95, 0.95, 0.95))));
+    objects.push_back(new Sphere(Vec3(0, -1005, 0), 1000, new Lambertian(Vec3(0.95, 0.95, 0.95))));
+    objects.push_back(new Sphere(Vec3(-1005, 0, 0), 1000, new Lambertian(Vec3(0.95, 0.05, 0.05))));
+    objects.push_back(new Sphere(Vec3(1005, 0, 0), 1000, new Lambertian(Vec3(0.95, 0.95, 0.05))));
+
+    objects.push_back(new Sphere(Vec3(0, 0, 0), 0.5, new Lambertian(Vec3(100, 100, 1000))));
+
+    return objects;
+}
+
 
 int main() {
-    std::ofstream file("picture.ppm");
-    int width = 1024;
-    int height = 500;
+    std::ofstream file("close-up.ppm");
+    int width = 1280;
+    int height = 720;
 
-    int numSample = 5;
+    int numSample = 200;
     //int maxDepth = 50;
 
-//    std::vector<Hittable *> objects;
-//    objects.push_back(new Sphere(Vec3(2, 0, 0), 0.5, new Lambertian(Vec3(0.1, 0.9, 0.5))));
-//    objects.push_back(new Sphere(Vec3(1, 0, 0), 0.5, new Dielectric(Vec3(0.6, 0.8, 1), 1.5)));
-//  objects.push_back(new Sphere(Vec3(1, 0, 0), -0.4, new Dielectric(1.5)));
-//    objects.push_back(new Sphere(Vec3(0, 0, 0), 0.5, new Lambertian(Vec3(0.5, 0.5, 0.5))));
-//    objects.push_back(new Sphere(Vec3(-1, 0, 0), 0.5, new Metal(Vec3(0.9, 0.8, 0.2), 0.3)));
-//    objects.push_back(new Sphere(Vec3(-2, 0, 0), 0.5, new Dielectric(Vec3(0.5, 1, 0.5), 1.5)));
-//    objects.push_back(new Sphere(Vec3(-2, 0, 0), -0.4, new Dielectric(Vec3(1, 1, 1), 1.5)));
-    //objects.push_back(new Sphere(Vec3(0, -100.5, 0), 100, new Lambertian(Vec3(1.0, 0.2, 0.1))));
-
-//    HittableList world;
-//    world.objectList = objects;
-
-    Camera camera = Camera(
+    // Random shperes camera
+    /*Camera camera = Camera(
             Vec3(0, 3, -20),
             Vec3(0, 1, 0),
             Vec3(0, 1, 0),
             25,
             float(width) / float(height),
-            0.32,
+            0.2,
             15
+    );*/
+
+    // Close-up camera
+    Camera camera = Camera(
+            Vec3(0, 3, -20),
+            Vec3(0, 2.6, -1),
+            Vec3(0, 1, 0),
+            7,
+            float(width) / float(height),
+            0.2,
+            19
     );
+
+    // Scene1 camera
+    /*Camera camera = Camera(
+            Vec3(2.7, 0.8, -2.1),
+            Vec3(0, 0.1, -0.2),
+            Vec3(0, 1, 0),
+            35,
+            float(width) / float(height),
+            0.6,
+            3.5
+    );*/
     std::default_random_engine randGenerator;
     std::vector<Hittable *> spheres = randomSpheres(1000, randGenerator);
     std::cout << spheres.size() << std::endl;
@@ -140,6 +182,14 @@ int main() {
             int ir = int(255. * powf(pixel.x, 1.f / 2));
             int ig = int(255. * powf(pixel.y, 1.f / 2));
             int ib = int(255. * powf(pixel.z, 1.f / 2));
+
+            if (ir > 255) ir = 255;
+            if (ig > 255) ig = 255;
+            if (ib > 255) ib = 255;
+            if (ir < 0) ir = 0;
+            if (ig < 0) ig = 0;
+            if (ib < 0) ib = 0;
+
             if (ir > 255 || ig > 255 || ib > 255) std::cout << pixel << std::endl;
             if (ir < 0 || ig < 0 || ib < 0) std::cout << "i:" << i << " j: " << j << std::endl;
 
